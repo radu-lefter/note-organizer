@@ -2,6 +2,7 @@ import React from "react";
 //import PropTypes from "prop-types";
 import styled from "styled-components";
 import Card from "./Card";
+//import Session from "./Session";
 //import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
 
 export const CardWrapper = styled.div`
@@ -13,25 +14,26 @@ export const CardWrapper = styled.div`
   display: flex;
 `;
 
+const NewContainer = styled.div`
+  width: 25%;
+  border: 1px solid;
+  padding: 25px 12px 18px;
+  background-color: #A9A9A9;
+  margin: 5px`;
+
 
 function Dashboard(props) {
 
-
-
-
     return (
       <CardWrapper>
-        {props.sessions.map((session, index) => (<Card
+        <NewContainer>+ New session</NewContainer>
+        {props.sessions.map((session, index) => (<Card 
           key={index}
+          id={session.id}
           name={session.name}
           date={session.date}
           topics={session.topics.map(a => a.topic + " ")}
         />))}
-        {/* <Card
-          name={props.sessions[0].name}
-          date={props.sessions[0].date}
-          topics={props.sessions[0].topics.map(a => a.topic + " ")}
-        /> */}
       </CardWrapper>
     );
   }

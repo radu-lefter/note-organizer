@@ -1,11 +1,14 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled.div`
   width: 25%;
   border: 1px solid;
   padding: 25px 12px 18px;
-  background-color: #A9A9A9`;
+  background-color: #a9a9a9;
+  margin: 5px;
+`;
 
 const Title = styled.h2`
   color: black;
@@ -13,7 +16,7 @@ const Title = styled.h2`
   @media (max-width: 500px) {
     font-size: 1rem;
   }
-`
+`;
 const Date = styled.div`
   color: black;
   font-weight: 300;
@@ -21,24 +24,23 @@ const Date = styled.div`
   @media (max-width: 500px) {
     font-size: 0.8rem;
   }
-`
+`;
 const Description = styled.p`
   color: black;
   font-weight: 300;
   @media (max-width: 500px) {
     font-size: 0.75rem;
   }
-`
+`;
 
-const Card = ({
-  name,
-  date,
-  topics
-}) => (
-  <StyledContainer>
-    <Title>{name}</Title>
-    <Date>{date}</Date>
-    <Description>{topics}</Description>
-  </StyledContainer>
-)
-export default Card
+function Card({ id, name, date, topics }) {
+  return (
+    <StyledContainer>
+      <Title>{name}</Title>
+      <Date>{date}</Date>
+      <Description>{topics}</Description>
+      <Link to={`/session/${id}`}>Session</Link>
+    </StyledContainer>
+  );
+}
+export default Card;

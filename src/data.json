@@ -1,19 +1,25 @@
 [
     { 
         "id": 1,
-        "name": "untitled", 
+        "name": "data science", 
         "date": "Wed Jan 29 2022 07:17:11 GMT+0000 (Greenwich Mean Time)",
         "notes": [
             {
                 "id": 1, 
+                "topic_id": 1,
+                "subtopic_id": null,
                 "note": "here is a note"
             }, 
             {
                 "id": 2, 
+                "topic_id": null,
+                "subtopic_id": 1,
                 "note": "here is a new note"
             },
             {
                 "id": 3, 
+                "topic_id": null,
+                "subtopic_id": 2,
                 "note": "here is another note"
             }
         ],
@@ -30,11 +36,13 @@
         "subtopics":[
             {
                 "id": 1, 
-                "topic": "here is a subtopic"
+                "topic_id": 2,
+                "subtopic": "here is a subtopic"
             }, 
             {
                 "id": 2, 
-                "topic": "here is a new subtopic"
+                "topic_id": 2,
+                "subtopic": "here is a new subtopic"
             }
         ]
     },
@@ -68,11 +76,11 @@
         "subtopics":[
             {
                 "id": 1, 
-                "topic": "here is a subtopic"
+                "subtopic": "here is a subtopic"
             }, 
             {
                 "id": 2, 
-                "topic": "here is a new subtopic"
+                "subtopic": "here is a new subtopic"
             }
         ]
     },
@@ -106,11 +114,11 @@
         "subtopics":[
             {
                 "id": 1, 
-                "topic": "here is a subtopic"
+                "subtopic": "here is a subtopic"
             }, 
             {
                 "id": 2, 
-                "topic": "here is a new subtopic"
+                "subtopic": "here is a new subtopic"
             }
         ]
     }
