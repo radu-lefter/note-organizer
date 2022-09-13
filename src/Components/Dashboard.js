@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Card from "./Card";
 //import Session from "./Session";
 //import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
+import { Link } from "react-router-dom";
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -26,7 +27,7 @@ function Dashboard(props) {
 
     return (
       <CardWrapper>
-        <NewContainer>+ New session</NewContainer>
+        <NewContainer>+ <Link to={`/newsession`}>New Session</Link></NewContainer>
         {props.sessions.map((session, index) => (<Card 
           key={index}
           id={session.id}

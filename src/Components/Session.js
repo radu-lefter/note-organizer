@@ -9,7 +9,6 @@ export const CardWrapper = styled.div`
   margin: auto;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05), 0 0px 40px rgba(0, 0, 0, 0.08);
   border-radius: 5px;
-  display: flex;
 `;
 
 
@@ -25,6 +24,19 @@ function Session(props) {
     return (
       <CardWrapper>
         <h1>Hi from {data.name}</h1>
+        <h2>Session recorded at {data.date}</h2>
+            
+        {!data.topics && data.notes.map((note, i) => (<p>{note.note}</p>))}
+        {data.topics && data.topics.map((topic, i) => (
+            <div>
+              <h4>{topic.topic}</h4>
+              {data.notes && data.notes.map((note, i) => (
+                <p>{topic.id === note.topic_id && note.note}</p>
+              )
+              
+              )}
+            </div>
+            ))}
       </CardWrapper>
     );
   }
