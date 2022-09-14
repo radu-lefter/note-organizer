@@ -12,7 +12,7 @@ function NewSession(){
     const [title, setTitle] = useState("Untitled")
 
 
-    const handleClick = () => {
+    const handleNoteClick = () => {
         const text = document.querySelector('#noteinput').value.trim();
         if (text) {
           const newNote = {
@@ -20,7 +20,7 @@ function NewSession(){
                 "topic_id": null,
                 "note": text
           }
-          
+          document.querySelector('#noteinput').value = '';
           const updatedNotes = [...notes, newNote];
           console.log(updatedNotes);
           setNotes(updatedNotes);
@@ -29,11 +29,23 @@ function NewSession(){
       };
     
       const handleTitleChange = (event) => {
-        //event.preventDefault();
         if (event.key === 'Enter') {
         setTitle(event.target.value);
         setIsEditing(false);
         }
+      }
+
+      const handleSaveClick = () =>{
+        const sessionsColRef = collection(db, 'sessions');
+        return addDoc(sessionsColRef, {
+            created: serverTimestamp(),
+            session: {
+                date: serverTimestamp(), 
+                name: title, 
+                notes: notes, 
+                topics: []
+            }
+        });
       }
 
     return(
@@ -45,7 +57,8 @@ function NewSession(){
                 : <h1 onDoubleClick ={()=> setIsEditing(true)}>{title}</h1>
         }
         <input id="noteinput" style={{ width: '80%' }} type="text" placeholder="Enter a new note" />
-        <button onClick={handleClick}>Add note</button>
+        <button onClick={handleNoteClick}>Add note</button>
+        <button onClick={handleSaveClick}>Save and close</button>
         {notes.map((note)=>(<p>{note.note}</p>))}
         </>
         
