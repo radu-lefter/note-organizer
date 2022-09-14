@@ -5,6 +5,7 @@ import Card from "./Card";
 //import Session from "./Session";
 //import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
 import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -26,7 +27,10 @@ const NewContainer = styled.div`
 function Dashboard(props) {
 
     return (
+      <>
+      <Navbar></Navbar>
       <CardWrapper>
+        
         <NewContainer>+ <Link to={`/newsession`}>New Session</Link></NewContainer>
         {props.sessions.map((session, index) => (<Card 
           key={index}
@@ -36,6 +40,7 @@ function Dashboard(props) {
           topics={session.topics.map(a => a.topic + " ")}
         />))}
       </CardWrapper>
+      </>
     );
   }
   
