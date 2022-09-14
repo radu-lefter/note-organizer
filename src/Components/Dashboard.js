@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from 'react';
 //import PropTypes from "prop-types";
 import styled from "styled-components";
 import Card from "./Card";
@@ -6,6 +7,8 @@ import Card from "./Card";
 //import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
+import { db } from "../config/firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -26,18 +29,35 @@ const NewContainer = styled.div`
 
 function Dashboard(props) {
 
+  const [data, setData] = useState([]);
+
+  async function getAllDocs() {
+      const newdata = []
+      const querySnapshot = await getDocs(collection(db, "sessions"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        newdata.push({id: doc.id, session: doc.data()});
+      });
+      setData(newdata);
+    }
+
+    useEffect(() => {
+      getAllDocs();
+    }, []);
+
+    console.log(data);
     return (
       <>
       <Navbar></Navbar>
       <CardWrapper>
         
         <NewContainer>+ <Link to={`/newsession`}>New Session</Link></NewContainer>
-        {props.sessions.map((session, index) => (<Card 
+        {data.map((session, index) => (<Card 
           key={index}
           id={session.id}
-          name={session.name}
-          date={session.date}
-          topics={session.topics.map(a => a.topic + " ")}
+          name={session.session.session.name}
+          date={session.session.session.date.seconds}
+          topics={session.session.session.topics && session.session.session.topics.map(a => a.topic + " ")}
         />))}
       </CardWrapper>
       </>

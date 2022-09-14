@@ -1,12 +1,14 @@
 import React from "react";
-import styled from "styled-components";
+//import styled from "styled-components";
 import { useState } from 'react';
 import Navbar from "./Navbar";
+import {useNavigate} from 'react-router-dom';
 import { db } from "../config/firebase-config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 function NewSession(){
 
+    const navigate = useNavigate();
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState("Untitled")
@@ -37,7 +39,7 @@ function NewSession(){
 
       const handleSaveClick = () =>{
         const sessionsColRef = collection(db, 'sessions');
-        return addDoc(sessionsColRef, {
+        addDoc(sessionsColRef, {
             created: serverTimestamp(),
             session: {
                 date: serverTimestamp(), 
@@ -46,6 +48,7 @@ function NewSession(){
                 topics: []
             }
         });
+        navigate('/');
       }
 
     return(
@@ -59,7 +62,7 @@ function NewSession(){
         <input id="noteinput" style={{ width: '80%' }} type="text" placeholder="Enter a new note" />
         <button onClick={handleNoteClick}>Add note</button>
         <button onClick={handleSaveClick}>Save and close</button>
-        {notes.map((note)=>(<p>{note.note}</p>))}
+        {notes.map((note, i)=>(<p key="{i}">{note.note}</p>))}
         </>
         
     )
