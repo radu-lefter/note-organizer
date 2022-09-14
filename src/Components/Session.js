@@ -18,7 +18,7 @@ function Session(props) {
 
     let { id } = useParams();
 
-    let data = props.sessions.find(session => session.id == id)
+    let data = props.sessions.find(session => session.id === +id)
     console.log(data)
 
 
