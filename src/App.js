@@ -34,8 +34,8 @@ function App() {
       <Routes>
         <Route path="/" element={ <Dashboard data={data} /> } />
         <Route path="newsession" element={ <NewSession /> } />
-        {/* <Route path="session/:id" element={ <Session /> } /> */}
-        <Route path="session/:id" element={ <Session sessions={data}/> } />
+        <Route path="session/:id" element={ <Session /> } />
+        {/* <Route path="session/:id" element={ <Session sessions={data}/> } /> */}
       </Routes> 
     </div>
   );

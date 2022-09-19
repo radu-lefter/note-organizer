@@ -50,7 +50,7 @@ function NewSession(){
         navigate('/');
       }
 
-    return(
+    return( 
         <>
         <Navbar></Navbar>
         {
@@ -61,7 +61,7 @@ function NewSession(){
         <input id="noteinput" style={{ width: '80%' }} type="text" placeholder="Enter a new note" />
         <button onClick={handleNoteClick}>Add note</button>
         <button onClick={handleSaveClick}>Save and close</button>
-        {notes.map((note, i)=>(<p key="{i}">{note.note}</p>))}
+        {notes.map((note, i)=>(<p key={i}>{note.note}</p>))}
         </>
         
     )
