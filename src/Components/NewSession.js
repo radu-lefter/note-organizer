@@ -8,6 +8,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 function NewSession(){
 
+    const timeStart = new Date();
     const navigate = useNavigate();
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
@@ -41,12 +42,10 @@ function NewSession(){
         const sessionsColRef = collection(db, 'sessions');
         addDoc(sessionsColRef, {
             created: serverTimestamp(),
-            session: {
-                date: serverTimestamp(), 
-                name: title, 
-                notes: notes, 
-                topics: []
-            }
+            date: timeStart, 
+            name: title, 
+            notes: notes, 
+            topics: []         
         });
         navigate('/');
       }

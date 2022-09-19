@@ -38,9 +38,9 @@ function Dashboard(props) {
         {props.data.map((session, index) => (<Card 
           key={index}
           id={session.id}
-          name={session.session.session.name}
-          date={session.session.session.date.seconds}
-          topics={session.session.session.topics && session.session.session.topics.map(a => a.topic + " ")}
+          name={session.session.name}
+          date={session.session.date.seconds}
+          topics={session.session.topics && session.session.topics.map(a => a.topic + " ")}
         />))}
       </CardWrapper>
       </>
