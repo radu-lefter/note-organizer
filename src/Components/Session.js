@@ -7,7 +7,6 @@ import Note from './Note';
 import {
   doc,
   getDoc,
-  setDoc,
   updateDoc,
   arrayRemove,
   arrayUnion,
@@ -27,14 +26,9 @@ function Session(props) {
   let { id } = useParams();
 
   const [session, setSession] = useState(null);
-  const [editing, setEditing] = useState(false);
 
   const handleNoteDel = async (note) => {
-    // const sessRef = doc(db, 'sessions', id);
-    // updateDoc(sessRef, {
-    //     notes: arrayRemove(note)
-    // });
-    // window.location.reload(true);
+ 
     const updatedNotes = session.notes.filter((item) => item.id !== note.id);
     
     setSession({ ...session, notes: updatedNotes });
@@ -45,35 +39,6 @@ function Session(props) {
        }).then(() => {
            console.log("deleted");
          });
-    // await setDoc(
-    //   sessRef,
-    //   session
-    // ).then(() => {
-    //   console.log("deleted");
-    // });;
-
-    // try {
-    //   const sessRef = doc(db, 'sessions', id);
-    //   const docSnap = await setDoc(
-    //       sessRef,
-    //       {
-    //         created: session.created,
-    //         date: session.date,
-    //         name: session.name,
-    //         notes: session.notes,
-    //         topics: session.topics,
-    //       }
-    //     );
-      //if (docSnap.exists()) {
-        //console.log('Document data:', docSnap.data());
-        //setSession(docSnap.data());
-      //} else {
-        // doc.data() will be undefined in this case
-        //console.log('No such document!');
-      //}
-    // } catch (error) {
-    //   console.log(error);
-    // }
     
   };
 
@@ -102,7 +67,6 @@ function Session(props) {
         });
       });
 
-      setEditing(false);
 
     }
   };
@@ -171,7 +135,6 @@ function Session(props) {
                 note={note}
                 delNote={handleNoteDel}
                 updNote={handleNoteChange}
-                editing={editing}
               />
             ) : (
               ''

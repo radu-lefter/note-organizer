@@ -7,7 +7,9 @@ import Card from "./Card";
 //import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
-
+import { useState, useEffect } from 'react';
+import { db } from "../config/firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -26,8 +28,27 @@ const NewContainer = styled.div`
   margin: 5px`;
 
 
-function Dashboard(props) {
+function Dashboard() {
 
+  const [data, setData] = useState([]);
+
+  async function getAllDocs() {
+      const newdata = []
+      const querySnapshot = await getDocs(collection(db, "sessions"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        newdata.push({id: doc.id, session: doc.data()});
+      });
+      setData(newdata);
+    }
+
+    useEffect(() => {
+      getAllDocs();
+    }, []);
+
+    if (!data) {
+      return <h2>data is loading</h2>;
+    }
 
     return (
       <>
@@ -35,7 +56,7 @@ function Dashboard(props) {
       <CardWrapper>
         
         <NewContainer>+ <Link to={`/newsession`}>New Session</Link></NewContainer>
-        {props.data.map((session, index) => (<Card 
+        {data.map((session, index) => (<Card 
           key={index}
           id={session.id}
           name={session.session.name}

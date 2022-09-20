@@ -38,16 +38,16 @@ function NewSession(){
         }
       }
 
-      const handleSaveClick = () =>{
+      const handleSaveClick = async () =>{
         const sessionsColRef = collection(db, 'sessions');
-        addDoc(sessionsColRef, {
+        await addDoc(sessionsColRef, {
             created: serverTimestamp(),
             date: timeStart, 
             name: title, 
             notes: notes, 
             topics: []         
-        });
-        navigate('/');
+        }).then(()=>{navigate('/');})
+        
       }
 
     return( 
