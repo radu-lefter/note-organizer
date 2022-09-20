@@ -23,22 +23,46 @@ export const CardWrapper = styled.div`
 `;
 
 function Session(props) {
-  let { id } = useParams();
 
+  let { id } = useParams();
   const [session, setSession] = useState(null);
+  //const [topics, setTopics] = useState([]);
+
 
   const handleNoteDel = async (note) => {
- 
     const updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    
     setSession({ ...session, notes: updatedNotes });
     const sessRef = doc(db, 'sessions', id);
     console.log(session);
     await updateDoc(sessRef, {
-           notes: arrayRemove(note)
-       }).then(() => {
-           console.log("deleted");
-         });
+      notes: arrayRemove(note),
+    }).then(() => {
+      console.log('deleted');
+    });
+  };
+
+  const handleTopicChange = async (topic, note) => {
+    const updtNote = {
+      id: note.id,
+      note: note.note,
+      topic_id: +topic,
+    };
+    let updatedNotes = session.notes.filter((item) => item.id !== note.id);
+    updatedNotes.push(updtNote);
+  
+      setSession({ ...session, notes: updatedNotes });
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        notes: arrayRemove(note),
+      }).then(() => {
+        updateDoc(sessRef, {
+          notes: arrayUnion({
+            id: note.id,
+            note: note.note,
+            topic_id: topic,
+          }),
+        });
+      });
     
   };
 
@@ -47,11 +71,9 @@ function Session(props) {
       id: note.id,
       note: event.target.value,
       topic_id: null,
-    }
+    };
     let updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    updatedNotes.push(updtNote)
-    
-
+    updatedNotes.push(updtNote);
     if (event.key === 'Enter') {
       setSession({ ...session, notes: updatedNotes });
       const sessRef = doc(db, 'sessions', id);
@@ -66,10 +88,30 @@ function Session(props) {
           }),
         });
       });
-
-
     }
   };
+
+  const handleAddTopClick = async (event) =>{
+    const text = document.querySelector('#topicinput').value.trim();
+    let updTopics = session.topics;
+    let newTopic = {};
+    if (text) {
+        newTopic["id"] = updTopics.length + 1;
+        newTopic["topic"] = text
+      updTopics.push(newTopic);
+    }
+      document.querySelector('#topicinput').value = '';
+      setSession({ ...session, topics: updTopics }); 
+
+    const sessRef = doc(db, 'sessions', id);
+    await updateDoc(sessRef, {
+      topics: arrayUnion({
+        id: updTopics.length,
+        topic: text
+      }),
+    });
+    
+  }
 
   useEffect(() => {
     async function getDocument() {
@@ -102,10 +144,29 @@ function Session(props) {
       <CardWrapper>
         <h1>Hi from {session.name}</h1>
         <h2>Session recorded at {session.date.seconds}</h2>
+        <div>
+          {/* <h3>Your topics</h3>
+          {session.topics.length !== 0 ? (
+            session.topics.map((topic, i) => (
+              <div>
+                <h4>{topic.topic}</h4>
+              </div>
+            ))
+          ) : (
+            <p>No topics to display</p>
+          )} */}
+          <input
+            id="topicinput"
+            style={{ width: '20%' }}
+            type="text"
+            placeholder="Enter a new topic"
+          />
+          <button onClick={handleAddTopClick}>Add topic</button>
+        </div>
 
         {session.topics.length !== 0
           ? session.topics.map((topic, i) => (
-              <div>
+              <>
                 <h4>{topic.topic}</h4>
                 {session.notes.length === 0
                   ? ''
@@ -115,15 +176,17 @@ function Session(props) {
                           <Note
                             key={note.id}
                             note={note}
+                            topics={session.topics}
                             delNote={handleNoteDel}
                             updNote={handleNoteChange}
+                            setTopic={handleTopicChange}
                           />
                         ) : (
                           ''
                         )}
                       </>
                     ))}
-              </div>
+              </>
             ))
           : ''}
         <div>
@@ -133,8 +196,10 @@ function Session(props) {
               <Note
                 key={note.id}
                 note={note}
+                topics={session.topics}
                 delNote={handleNoteDel}
                 updNote={handleNoteChange}
+                setTopic={handleTopicChange}
               />
             ) : (
               ''
