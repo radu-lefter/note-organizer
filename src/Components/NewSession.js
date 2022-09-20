@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import {useNavigate} from 'react-router-dom';
 import { db } from "../config/firebase-config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 function NewSession(){
 
@@ -13,13 +14,14 @@ function NewSession(){
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState("Untitled")
+  
 
 
     const handleNoteClick = () => {
         const text = document.querySelector('#noteinput').value.trim();
         if (text) {
           const newNote = {
-                "id": notes.length + 1, 
+                "id": uuidv4(), 
                 "topic_id": null,
                 "note": text
           }

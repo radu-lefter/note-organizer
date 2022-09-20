@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Note from './Note';
+import Topic from './Topic';
 import {
   doc,
   getDoc,
@@ -13,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
 import { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -29,48 +31,38 @@ function Session(props) {
   //const [topics, setTopics] = useState([]);
 
 
+
+
   const handleNoteDel = async (note) => {
     const updatedNotes = session.notes.filter((item) => item.id !== note.id);
     setSession({ ...session, notes: updatedNotes });
     const sessRef = doc(db, 'sessions', id);
-    console.log(session);
+    //console.log(session);
     await updateDoc(sessRef, {
       notes: arrayRemove(note),
     }).then(() => {
-      console.log('deleted');
+      console.log('note deleted');
     });
   };
 
-  const handleTopicChange = async (topic, note) => {
-    const updtNote = {
-      id: note.id,
-      note: note.note,
-      topic_id: +topic,
-    };
-    let updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    updatedNotes.push(updtNote);
-  
-      setSession({ ...session, notes: updatedNotes });
-      const sessRef = doc(db, 'sessions', id);
-      await updateDoc(sessRef, {
-        notes: arrayRemove(note),
-      }).then(() => {
-        updateDoc(sessRef, {
-          notes: arrayUnion({
-            id: note.id,
-            note: note.note,
-            topic_id: topic,
-          }),
-        });
-      });
-    
+  const handleTopicDel = async (topic) => {
+    const updatedTopics = session.topics.filter((item) => item.id !== topic.id);
+    const updatedNotes = session.notes.map(function(note){if(note.topic_id === topic.id){note.topic_id=null} return note})
+    setSession({ ...session, topics: updatedTopics, notes: updatedNotes });
+    const sessRef = doc(db, 'sessions', id);
+    await updateDoc(sessRef, {
+      topics: arrayRemove(topic),
+      notes: updatedNotes
+    }).then(() => {
+      console.log('topic deleted');
+    });
   };
 
   const handleNoteChange = async (event, note) => {
     const updtNote = {
       id: note.id,
       note: event.target.value,
-      topic_id: null,
+      topic_id: note.topic_id,
     };
     let updatedNotes = session.notes.filter((item) => item.id !== note.id);
     updatedNotes.push(updtNote);
@@ -81,11 +73,27 @@ function Session(props) {
         notes: arrayRemove(note),
       }).then(() => {
         updateDoc(sessRef, {
-          notes: arrayUnion({
-            id: note.id,
-            note: event.target.value,
-            topic_id: null,
-          }),
+          notes: updatedNotes,
+        });
+      });
+    }
+  };
+
+  const handleTopicChange = async (event, topic) => {
+    const updtTopic = {
+      id: topic.id,
+      topic: event.target.value
+    };
+    let updatedTopics = session.topics.filter((item) => item.id !== topic.id);
+    updatedTopics.push(updtTopic);
+    if (event.key === 'Enter') {
+      setSession({ ...session, topics: updatedTopics });
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        topics: arrayRemove(topic),
+      }).then(() => {
+        updateDoc(sessRef, {
+          topics: updatedTopics,
         });
       });
     }
@@ -96,7 +104,7 @@ function Session(props) {
     let updTopics = session.topics;
     let newTopic = {};
     if (text) {
-        newTopic["id"] = updTopics.length + 1;
+        newTopic["id"] = uuidv4();
         newTopic["topic"] = text
       updTopics.push(newTopic);
     }
@@ -105,13 +113,34 @@ function Session(props) {
 
     const sessRef = doc(db, 'sessions', id);
     await updateDoc(sessRef, {
-      topics: arrayUnion({
-        id: updTopics.length,
-        topic: text
-      }),
-    });
-    
+      topics: updTopics
+    });   
   }
+
+  const handleTopicAssign = async (topic, note) => {
+    const updtNote = {
+      id: note.id,
+      note: note.note,
+      topic_id: topic.id,
+    };
+    let updatedNotes = session.notes.filter((item) => item.id !== note.id);
+    updatedNotes.push(updtNote);
+  
+      setSession({ ...session, notes: updatedNotes });
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        notes: arrayRemove(note),
+      }).then(() => {
+        updateDoc(sessRef, {
+          notes: updatedNotes,
+        });
+      });
+    
+  };
+
+  
+
+ 
 
   useEffect(() => {
     async function getDocument() {
@@ -167,7 +196,7 @@ function Session(props) {
         {session.topics.length !== 0
           ? session.topics.map((topic, i) => (
               <>
-                <h4>{topic.topic}</h4>
+                <Topic key={topic.id} topic={topic} delTopic={handleTopicDel} updTopic={handleTopicChange}/>
                 {session.notes.length === 0
                   ? ''
                   : session.notes.map((note, i) => (
@@ -179,7 +208,7 @@ function Session(props) {
                             topics={session.topics}
                             delNote={handleNoteDel}
                             updNote={handleNoteChange}
-                            setTopic={handleTopicChange}
+                            setTopic={handleTopicAssign}
                           />
                         ) : (
                           ''
@@ -199,7 +228,7 @@ function Session(props) {
                 topics={session.topics}
                 delNote={handleNoteDel}
                 updNote={handleNoteChange}
-                setTopic={handleTopicChange}
+                setTopic={handleTopicAssign}
               />
             ) : (
               ''

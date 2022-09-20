@@ -5,7 +5,7 @@ function Note(props) {
   const [isHovered, setHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showSelect, setShowSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState(1);
+  const [selectValue, setSelectValue] = useState(props.topics[0]);
 
   //console.log(props.topics);
 
