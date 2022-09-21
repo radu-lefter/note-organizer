@@ -2,10 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 
 function Note(props) {
+
   const [isHovered, setHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showSelect, setShowSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState(props.topics[0].id);
+  const [selectValue, setSelectValue] = useState(null);
+  const [error, setError] = useState("");
 
 
   const handleEditing = (event) => {
@@ -17,6 +19,18 @@ function Note(props) {
   const handleSelect = (event) => {
     setSelectValue(event.target.value)
 
+  };
+
+  const handleAddTopic = () => {
+    if(props.topics.length > 0){
+      setSelectValue(props.topics[0].id);
+      setShowSelect(true);
+      setError("");
+    }else{
+      setError("Please add topics first");
+    }
+    
+    
   };
 
   return (
@@ -43,7 +57,7 @@ function Note(props) {
                 <button onClick={() => props.delNote(props.note)} type="submit">
                   Delete
                 </button>
-                <button onClick={() => setShowSelect(true)} type="submit">
+                <button onClick={handleAddTopic} type="submit">
                   Add topic
                 </button>
               </>
@@ -64,6 +78,7 @@ function Note(props) {
           )}
         </>
       )}
+      <p>{error}</p>
     </>
   );
 }

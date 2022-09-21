@@ -14,7 +14,7 @@ function NewSession(){
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState("Untitled")
-  
+    const [style, setStyle] = useState({ width: '80%' });
 
 
     const handleNoteClick = () => {
@@ -34,10 +34,20 @@ function NewSession(){
       };
     
       const handleTitleChange = (event) => {
+        console.log(event.target.value.length);
         if (event.key === 'Enter') {
         setTitle(event.target.value);
         setIsEditing(false);
         }
+      }
+
+      const handleInputChange = (event) => {
+        if(event.target.value.length > 10){
+          setStyle({width: '80%', border: '1px solid red', outline: 'none'})
+        }else{
+          setStyle({width: '80%', border: '1px solid blue', outline: 'none'})
+        }
+        
       }
 
       const handleSaveClick = async () =>{
@@ -60,7 +70,7 @@ function NewSession(){
                 <input type = 'text' onKeyDown={handleTitleChange} defaultValue = {title}/> 
                 : <h1 onDoubleClick ={()=> setIsEditing(true)}>{title}</h1>
         }
-        <input id="noteinput" style={{ width: '80%' }} type="text" placeholder="Enter a new note" />
+        <input id="noteinput" style={style} type="text" onKeyDown={handleInputChange} placeholder="Enter a new note" />
         <button onClick={handleNoteClick}>Add note</button>
         <button onClick={handleSaveClick}>Save and close</button>
         {notes.map((note, i)=>(<p key={i}>{note.note}</p>))}
