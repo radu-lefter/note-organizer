@@ -5,9 +5,8 @@ function Note(props) {
   const [isHovered, setHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showSelect, setShowSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState(props.topics[0]);
+  const [selectValue, setSelectValue] = useState(props.topics[0].id);
 
-  //console.log(props.topics);
 
   const handleEditing = (event) => {
     if (event.key === 'Enter') {
@@ -17,6 +16,7 @@ function Note(props) {
 
   const handleSelect = (event) => {
     setSelectValue(event.target.value)
+
   };
 
   return (
@@ -53,7 +53,7 @@ function Note(props) {
             <>
               <select value={selectValue} 
                       onChange={handleSelect} >
-                {props.topics.map((topic, i) => (<option value={topic.id}>{topic.topic}</option>))}
+                {props.topics.map((topic, i) => (<option key={i} value={topic.id}>{topic.topic}</option>))}
               </select>
               <button onClick={() => props.setTopic(selectValue, props.note)} type="submit">
                 Assign topic

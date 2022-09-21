@@ -5,13 +5,8 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Note from './Note';
 import Topic from './Topic';
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-} from 'firebase/firestore';
+import Title from './Title';
+import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,122 +20,116 @@ export const CardWrapper = styled.div`
 `;
 
 function Session(props) {
-
   let { id } = useParams();
   const [session, setSession] = useState(null);
-  //const [topics, setTopics] = useState([]);
 
+  const handleTitleChange = async (event, topic) => {
+    if (event.key === 'Enter') {
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        name: event.target.value,
+      }).then(() => {
+        setSession({ ...session, name: event.target.value });
+      });
+    }
+  };
 
-
+  const handleNoteUpdate = async (event, note) => {
+    
+    if (event.key === 'Enter') {
+      const updtNote = {
+        id: note.id,
+        note: event.target.value,
+        topic_id: note.topic_id,
+      };
+      let updatedNotes = session.notes.filter((item) => item.id !== note.id);
+      updatedNotes.push(updtNote);
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+          notes: updatedNotes,
+        }).then(()=>{
+          setSession({ ...session, notes: updatedNotes });
+        })
+    }
+  };
 
   const handleNoteDel = async (note) => {
     const updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    setSession({ ...session, notes: updatedNotes });
     const sessRef = doc(db, 'sessions', id);
-    //console.log(session);
     await updateDoc(sessRef, {
       notes: arrayRemove(note),
     }).then(() => {
+      setSession({ ...session, notes: updatedNotes });
       console.log('note deleted');
     });
   };
 
+  const handleAddTopic = async (event) => {
+    const text = document.querySelector('#topicinput').value.trim();
+    if (text) {
+      let updTopics = session.topics;
+      updTopics.push({ id: uuidv4(), topic: text });
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        topics: updTopics,
+      }).then(() => {
+        setSession({ ...session, topics: updTopics });
+      });
+    }
+    document.querySelector('#topicinput').value = '';
+  };
+
+  const handleTopicUpdate = async (event, topic) => {
+    if (event.key === 'Enter') {
+      const updtTopic = {
+        id: topic.id,
+        topic: event.target.value,
+      };
+      let updatedTopics = session.topics.filter((item) => item.id !== topic.id);
+      updatedTopics.push(updtTopic);
+      const sessRef = doc(db, 'sessions', id);
+      await updateDoc(sessRef, {
+        topics: updatedTopics,
+      }).then(() => {
+        setSession({ ...session, topics: updatedTopics });
+      });
+    }
+  };
+
   const handleTopicDel = async (topic) => {
     const updatedTopics = session.topics.filter((item) => item.id !== topic.id);
-    const updatedNotes = session.notes.map(function(note){if(note.topic_id === topic.id){note.topic_id=null} return note})
-    setSession({ ...session, topics: updatedTopics, notes: updatedNotes });
+    const updatedNotes = session.notes.map((note) => {
+      if (note.topic_id === topic.id) {
+        note.topic_id = null;
+      }
+      return note;
+    });
     const sessRef = doc(db, 'sessions', id);
     await updateDoc(sessRef, {
       topics: arrayRemove(topic),
-      notes: updatedNotes
+      notes: updatedNotes,
     }).then(() => {
+      setSession({ ...session, topics: updatedTopics, notes: updatedNotes });
       console.log('topic deleted');
     });
   };
 
-  const handleNoteChange = async (event, note) => {
-    const updtNote = {
-      id: note.id,
-      note: event.target.value,
-      topic_id: note.topic_id,
-    };
-    let updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    updatedNotes.push(updtNote);
-    if (event.key === 'Enter') {
-      setSession({ ...session, notes: updatedNotes });
-      const sessRef = doc(db, 'sessions', id);
-      await updateDoc(sessRef, {
-        notes: arrayRemove(note),
-      }).then(() => {
-        updateDoc(sessRef, {
-          notes: updatedNotes,
-        });
-      });
-    }
-  };
-
-  const handleTopicChange = async (event, topic) => {
-    const updtTopic = {
-      id: topic.id,
-      topic: event.target.value
-    };
-    let updatedTopics = session.topics.filter((item) => item.id !== topic.id);
-    updatedTopics.push(updtTopic);
-    if (event.key === 'Enter') {
-      setSession({ ...session, topics: updatedTopics });
-      const sessRef = doc(db, 'sessions', id);
-      await updateDoc(sessRef, {
-        topics: arrayRemove(topic),
-      }).then(() => {
-        updateDoc(sessRef, {
-          topics: updatedTopics,
-        });
-      });
-    }
-  };
-
-  const handleAddTopClick = async (event) =>{
-    const text = document.querySelector('#topicinput').value.trim();
-    let updTopics = session.topics;
-    let newTopic = {};
-    if (text) {
-        newTopic["id"] = uuidv4();
-        newTopic["topic"] = text
-      updTopics.push(newTopic);
-    }
-      document.querySelector('#topicinput').value = '';
-      setSession({ ...session, topics: updTopics }); 
-
-    const sessRef = doc(db, 'sessions', id);
-    await updateDoc(sessRef, {
-      topics: updTopics
-    });   
-  }
-
   const handleTopicAssign = async (topic, note) => {
+    //console.log(id)
     const updtNote = {
       id: note.id,
       note: note.note,
-      topic_id: topic.id,
+      topic_id: topic,
     };
     let updatedNotes = session.notes.filter((item) => item.id !== note.id);
     updatedNotes.push(updtNote);
-  
+    const sessRef = doc(db, 'sessions', id);
+    await updateDoc(sessRef, {
+      notes: updatedNotes,
+    }).then(() => {
       setSession({ ...session, notes: updatedNotes });
-      const sessRef = doc(db, 'sessions', id);
-      await updateDoc(sessRef, {
-        notes: arrayRemove(note),
-      }).then(() => {
-        updateDoc(sessRef, {
-          notes: updatedNotes,
-        });
-      });
-    
+    });
   };
-
-  
-
- 
 
   useEffect(() => {
     async function getDocument() {
@@ -161,8 +150,6 @@ function Session(props) {
     getDocument();
   }, [id]);
 
-  //let data = props.sessions.find((session) => session.id === id);
-
   if (!session) {
     return <h2>no session to display</h2>;
   }
@@ -171,51 +158,46 @@ function Session(props) {
     <>
       <Navbar></Navbar>
       <CardWrapper>
-        <h1>Hi from {session.name}</h1>
+        <Title name={session.name} updTitle={handleTitleChange} />
         <h2>Session recorded at {session.date.seconds}</h2>
         <div>
-          {/* <h3>Your topics</h3>
-          {session.topics.length !== 0 ? (
-            session.topics.map((topic, i) => (
-              <div>
-                <h4>{topic.topic}</h4>
-              </div>
-            ))
-          ) : (
-            <p>No topics to display</p>
-          )} */}
           <input
             id="topicinput"
             style={{ width: '20%' }}
             type="text"
             placeholder="Enter a new topic"
           />
-          <button onClick={handleAddTopClick}>Add topic</button>
+          <button onClick={handleAddTopic}>Add topic</button>
         </div>
 
         {session.topics.length !== 0
           ? session.topics.map((topic, i) => (
-              <>
-                <Topic key={topic.id} topic={topic} delTopic={handleTopicDel} updTopic={handleTopicChange}/>
+              <div key={i}>
+                <Topic
+                  key={i}
+                  topic={topic}
+                  delTopic={handleTopicDel}
+                  updTopic={handleTopicUpdate}
+                />
                 {session.notes.length === 0
                   ? ''
                   : session.notes.map((note, i) => (
-                      <>
+                      <div key={i}>
                         {topic.id === note.topic_id ? (
                           <Note
-                            key={note.id}
+                            key={i}
                             note={note}
                             topics={session.topics}
                             delNote={handleNoteDel}
-                            updNote={handleNoteChange}
+                            updNote={handleNoteUpdate}
                             setTopic={handleTopicAssign}
                           />
                         ) : (
                           ''
                         )}
-                      </>
+                      </div>
                     ))}
-              </>
+              </div>
             ))
           : ''}
         <div>
@@ -223,11 +205,11 @@ function Session(props) {
           {session.notes.map((note, i) =>
             note.topic_id === null ? (
               <Note
-                key={note.id}
+                key={i}
                 note={note}
                 topics={session.topics}
                 delNote={handleNoteDel}
-                updNote={handleNoteChange}
+                updNote={handleNoteUpdate}
                 setTopic={handleTopicAssign}
               />
             ) : (
