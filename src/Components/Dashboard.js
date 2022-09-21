@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useState, useEffect } from 'react';
 import { db } from "../config/firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, deleteDoc, collection, getDocs } from "firebase/firestore";
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -42,6 +42,14 @@ function Dashboard() {
       setData(newdata);
     }
 
+  const handleSessionDel = async (id)=>{
+      const docRef = doc(db, 'sessions', id); 
+      await deleteDoc(docRef).then(()=>{
+        console.log("Document deleted");
+        window.location.reload(false);
+      })
+  }
+
     useEffect(() => {
       getAllDocs();
     }, []);
@@ -62,6 +70,7 @@ function Dashboard() {
           name={session.session.name}
           date={session.session.date.seconds}
           topics={session.session.topics && session.session.topics.map(a => a.topic + " ")}
+          delSession={handleSessionDel}
         />))}
       </CardWrapper>
       </>

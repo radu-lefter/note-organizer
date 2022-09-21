@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from "react-router-dom";
+import { FaTrash  } from 'react-icons/fa';
 
 const StyledContainer = styled.div`
   width: 25%;
@@ -33,13 +34,14 @@ const Description = styled.p`
   }
 `;
 
-function Card({ id, name, date, topics }) {
+function Card({ id, name, date, topics, delSession }) {
   return (
     <StyledContainer>
       <Title>{name}</Title>
       <Date>{date}</Date>
       <Description>{topics}</Description>
       <Link to={`/session/${id}`}>Session</Link>
+      <button onClick={()=> delSession(id)}><FaTrash  /></button>
     </StyledContainer>
   );
 }

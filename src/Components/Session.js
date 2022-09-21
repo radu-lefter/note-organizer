@@ -159,7 +159,7 @@ function Session(props) {
       <Navbar></Navbar>
       <CardWrapper>
         <Title name={session.name} updTitle={handleTitleChange} />
-        <h2>Session recorded at {session.date.seconds}</h2>
+        <h2>Session recorded on {new Date(session.date.seconds * 1000).toLocaleString('en-GB',{timeZone:'UTC'})}</h2>
         <div>
           <input
             id="topicinput"
