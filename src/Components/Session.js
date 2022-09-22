@@ -28,7 +28,6 @@ function Session(props) {
 
   const handleTitleChange = async (event, topic) => {
     if (event.key === 'Enter') {
-      //const sessRef = doc(db, 'sessions', id);
       await updateDoc(sessRef, {
         name: event.target.value,
       }).then(() => {
@@ -77,7 +76,7 @@ function Session(props) {
       };
       let updatedNotes = session.notes.filter((item) => item.id !== note.id);
       updatedNotes.push(updtNote);
-      const sessRef = doc(db, 'sessions', id);
+      
       await updateDoc(sessRef, {
         notes: updatedNotes,
       }).then(() => {
@@ -88,7 +87,7 @@ function Session(props) {
 
   const handleNoteDel = async (note) => {
     const updatedNotes = session.notes.filter((item) => item.id !== note.id);
-    const sessRef = doc(db, 'sessions', id);
+    
     await updateDoc(sessRef, {
       notes: arrayRemove(note),
     }).then(() => {
@@ -102,7 +101,7 @@ function Session(props) {
     if (text) {
       let updTopics = session.topics;
       updTopics.push({ id: uuidv4(), topic: text });
-      const sessRef = doc(db, 'sessions', id);
+      
       await updateDoc(sessRef, {
         topics: updTopics,
       }).then(() => {
@@ -120,7 +119,7 @@ function Session(props) {
       };
       let updatedTopics = session.topics.filter((item) => item.id !== topic.id);
       updatedTopics.push(updtTopic);
-      const sessRef = doc(db, 'sessions', id);
+      
       await updateDoc(sessRef, {
         topics: updatedTopics,
       }).then(() => {
@@ -137,7 +136,7 @@ function Session(props) {
       }
       return note;
     });
-    const sessRef = doc(db, 'sessions', id);
+    
     await updateDoc(sessRef, {
       topics: arrayRemove(topic),
       notes: updatedNotes,
@@ -156,7 +155,7 @@ function Session(props) {
     };
     let updatedNotes = session.notes.filter((item) => item.id !== note.id);
     updatedNotes.push(updtNote);
-    const sessRef = doc(db, 'sessions', id);
+    
     await updateDoc(sessRef, {
       notes: updatedNotes,
     }).then(() => {
