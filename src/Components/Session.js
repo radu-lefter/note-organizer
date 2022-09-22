@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import Note from './Note';
 import Topic from './Topic';
 import Title from './Title';
-import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,11 +21,14 @@ export const CardWrapper = styled.div`
 
 function Session(props) {
   let { id } = useParams();
+  const sessRef = doc(db, 'sessions', id);
   const [session, setSession] = useState(null);
+  const [textarea, setTextarea] = useState('Please enter a short summary');
+  const [editSummary, setEditSummary] = useState(true);
 
   const handleTitleChange = async (event, topic) => {
     if (event.key === 'Enter') {
-      const sessRef = doc(db, 'sessions', id);
+      //const sessRef = doc(db, 'sessions', id);
       await updateDoc(sessRef, {
         name: event.target.value,
       }).then(() => {
@@ -34,8 +37,38 @@ function Session(props) {
     }
   };
 
+  const handleTextareaChange = (event) => {
+    setTextarea(event.target.value)
+    console.log(textarea)
+  }
+
+  const handleSubmit = async (e) => {
+       e.preventDefault()
+       await updateDoc(sessRef, {
+        summary: textarea,
+      }).then(() => {
+        setSession({ ...session, summary: textarea });
+        setEditSummary(true);
+        console.log("summary set")
+      });
+  }
+
+  const handleSummaryUpdate = () =>{
+       setTextarea(session.summary);
+       setEditSummary(false);
+  }
+
+  const handleSummaryDel = async () =>{
+    await updateDoc(sessRef, {
+      summary: deleteField(),
+    }).then(() => {
+      setEditSummary(false);
+      setTextarea('Please enter a short summary');
+      console.log('summary deleted');
+    });
+  }
+
   const handleNoteUpdate = async (event, note) => {
-    
     if (event.key === 'Enter') {
       const updtNote = {
         id: note.id,
@@ -46,10 +79,10 @@ function Session(props) {
       updatedNotes.push(updtNote);
       const sessRef = doc(db, 'sessions', id);
       await updateDoc(sessRef, {
-          notes: updatedNotes,
-        }).then(()=>{
-          setSession({ ...session, notes: updatedNotes });
-        })
+        notes: updatedNotes,
+      }).then(() => {
+        setSession({ ...session, notes: updatedNotes });
+      });
     }
   };
 
@@ -159,7 +192,12 @@ function Session(props) {
       <Navbar></Navbar>
       <CardWrapper>
         <Title name={session.name} updTitle={handleTitleChange} />
-        <h2>Session recorded on {new Date(session.date.seconds * 1000).toLocaleString('en-GB',{timeZone:'UTC'})}</h2>
+        <h2>
+          Session recorded on{' '}
+          {new Date(session.date.seconds * 1000).toLocaleString('en-GB', {
+            timeZone: 'UTC',
+          })}
+        </h2>
         <div>
           <input
             id="topicinput"
@@ -215,6 +253,20 @@ function Session(props) {
             ) : (
               ''
             )
+          )}
+        </div>
+        <div>
+          <h4>Summary</h4>
+          {session.summary && editSummary ? (
+            <div>
+            <p>{session.summary}</p>
+            <button onClick={handleSummaryUpdate}>Edit</button><button onClick={handleSummaryDel}>Delete</button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <textarea value={textarea} onChange={handleTextareaChange} rows="4" cols="50"/>
+              <input type="submit" />
+            </form>
           )}
         </div>
       </CardWrapper>
