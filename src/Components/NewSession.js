@@ -58,7 +58,7 @@ function NewSession(){
             name: title, 
             notes: notes, 
             topics: []         
-        }).then(()=>{navigate('/');})
+        }).then(()=>{navigate('/home');})
         
       }
 

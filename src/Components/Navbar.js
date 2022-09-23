@@ -189,13 +189,13 @@ function Navbar() {
           aria-hidden="true"
         />
         <ul className={`collapsed ${isExpanded ? 'is-expanded' : ''}`}>
-          <NavLink activeClassName="active" to="/home">
+          <NavLink to="/home">
             <li>home</li>
           </NavLink>
-          <NavLink activeClassName="active" to="/about">
+          <NavLink to="/about">
             <li>about</li>
           </NavLink>
-          <NavLink activeClassName="active" to="/">
+          <NavLink to="/">
             <li onClick={handleLogout}>logout</li>
           </NavLink>
         </ul>
