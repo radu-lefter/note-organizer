@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from "react-router-dom";
 import { FaTrash  } from 'react-icons/fa';
 
+
 const StyledContainer = styled.div`
   width: 25%;
   border: 1px solid;

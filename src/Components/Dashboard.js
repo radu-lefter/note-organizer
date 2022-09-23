@@ -3,8 +3,6 @@ import React from "react";
 //import PropTypes from "prop-types";
 import styled from "styled-components";
 import Card from "./Card";
-//import Session from "./Session";
-//import { FaCommentAlt, FaThumbsUp, FaRegEye } from 'react-icons/fa'
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useState, useEffect } from 'react';
@@ -64,7 +62,7 @@ function Dashboard() {
       <CardWrapper>
         
         <NewContainer>+ <Link to={`/newsession`}>New Session</Link></NewContainer>
-        {data.map((session, index) => (<Card 
+        {data.map((session, index) => (<Card
           key={index}
           id={session.id}
           name={session.session.name}
