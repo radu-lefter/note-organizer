@@ -5,7 +5,57 @@ import Navbar from "./Navbar";
 import {useNavigate} from 'react-router-dom';
 import { db } from "../config/firebase-config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+
+const NotesContainer = styled.div`
+width: 80%;
+height: 300px;
+margin: auto;
+text-align:center;
+`
+
+const Title = styled.h2`
+  color: black;
+  font-weight: 600;
+  text-align: center;
+`;
+
+const ButtonAdd = styled.button`
+  width: 85px;
+  background: black;
+  color: white;
+  border-radius: 7px;
+  padding: 12px;
+  margin: 10px;
+  font-size: 14px;
+  :disabled {
+    opacity: 0.4;
+  }
+  :hover {
+    box-shadow: 0 0 10px blue;
+  }
+`;
+
+const ButtonSave = styled.button`
+  width: 30%;
+  position:realtive;
+bottom: 0;
+margin: auto;
+  background: red;
+  color: white;
+  border-radius: 7px;
+  padding: 10px;
+  font-size: 16px;
+  :disabled {
+    opacity: 0.4;
+  }
+  :hover {
+    box-shadow: 0 0 10px red;
+  }
+`;
+
+
 
 function NewSession(){
 
@@ -14,7 +64,7 @@ function NewSession(){
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState("Untitled")
-    const [style, setStyle] = useState({ width: '80%' });
+    const [style, setStyle] = useState({ width: '80%', height: '10%', borderRadius: '7px' });
 
 
     const handleNoteClick = () => {
@@ -43,11 +93,11 @@ function NewSession(){
 
       const handleInputChange = (event) => {
         if(event.key === 'Enter'){
-          handleNoteClick();
+          handleNoteClick();      
         }else if(event.target.value.length > 100){
-          setStyle({width: '80%', border: '1px solid red', outline: 'none'})
+          setStyle({width: '80%', height: '10%', border: '3px solid red', borderRadius: '7px', outline: 'none'})
         }else{
-          setStyle({width: '80%', border: '1px solid blue', outline: 'none'})
+          setStyle({width: '80%', height: '10%', border: '3px solid blue', borderRadius: '7px', outline: 'none'})
         }
         
       }
@@ -60,22 +110,28 @@ function NewSession(){
             name: title, 
             notes: notes, 
             topics: []         
-        }).then(()=>{navigate('/home');})
+        }).then(
+           ()=>{navigate('/home');}
+          )
         
       }
 
     return( 
         <>
         <Navbar></Navbar>
+         <NotesContainer>
+        
         {
                 isEditing ? 
-                <input type = 'text' onKeyDown={handleTitleChange} defaultValue = {title}/> 
-                : <h1 onDoubleClick ={()=> setIsEditing(true)}>{title}</h1>
+                <input type = 'text' style={{ width:'20%' }} onKeyDown={handleTitleChange} defaultValue = {title}/> 
+                : <Title onDoubleClick ={()=> setIsEditing(true)}>{title}</Title>
         }
+       
         <input id="noteinput" style={style} type="text" onKeyDown={handleInputChange} placeholder="Enter a new note" />
-        <button onClick={handleNoteClick}>Add note</button>
-        <button onClick={handleSaveClick}>Save and close</button>
+        <ButtonAdd onClick={handleNoteClick}>Add note</ButtonAdd>
         {notes.map((note, i)=>(<p key={i}>{note.note}</p>))}
+        <ButtonSave onClick={handleSaveClick}>Save and close</ButtonSave>
+        </NotesContainer>
         </>
         
     )
