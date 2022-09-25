@@ -5,7 +5,7 @@ function Note(props) {
 
   const [isHovered, setHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [showSelect, setShowSelect] = useState(false);
+  const [showSelect, setShowSelect] = useState(props.select);
   const [selectValue, setSelectValue] = useState(null);
   const [error, setError] = useState("");
 
@@ -24,10 +24,13 @@ function Note(props) {
   const handleAddTopic = () => {
     if(props.topics.length > 0){
       setSelectValue(props.topics[0].id);
-      setShowSelect(true);
+      setShowSelect(prevCheck => !prevCheck);
       setError("");
     }else{
       setError("Please add topics first");
+      setTimeout(() => {
+        setError("");
+      }, "5000")
     }
     
     
@@ -58,21 +61,22 @@ function Note(props) {
                   Delete
                 </button>
                 <button onClick={handleAddTopic} type="submit">
-                  Assign topic
+                  Toggle select
                 </button>
               </>
             )}
           </p>
           {showSelect ? (
-            <>
+            <div id="select">
               <select value={selectValue} 
-                      onChange={handleSelect} >
+                      onChange={handleSelect}
+                       >
                 {props.topics.map((topic, i) => (<option key={i} value={topic.id}>{topic.topic}</option>))}
               </select>
               <button onClick={() => props.setTopic(selectValue, props.note)} type="submit">
-                Assign topic
+                Add topic
               </button>
-            </>
+            </div>
           ) : (
             ''
           )}

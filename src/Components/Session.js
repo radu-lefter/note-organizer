@@ -10,6 +10,7 @@ import { doc, getDoc, updateDoc, arrayRemove, deleteField } from 'firebase/fires
 import { db } from '../config/firebase-config';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import RotateLoader from 'react-spinners/ClipLoader';
 
 export const CardWrapper = styled.div`
   padding: 3%;
@@ -48,13 +49,13 @@ width: 55%;
 
 
 const Button = styled.button`
-  width: 55px;
+  width: 75px;
   background: black;
   color: white;
   border-radius: 7px;
   padding: 10px;
   margin: 10px;
-  font-size: 10px;
+  font-size: 15px;
   :disabled {
     opacity: 0.4;
   }
@@ -64,13 +65,13 @@ const Button = styled.button`
 `;
 
 const ButtonDel = styled.button`
-width: 55px;
+width: 75px;
   background: red;
   color: white;
   border-radius: 7px;
   padding: 10px;
   margin: 10px;
-  font-size: 10px;
+  font-size: 15px;
   :disabled {
     opacity: 0.4;
   }
@@ -80,12 +81,13 @@ width: 55px;
 `;
 
 const ButtonForm = styled.input`
+width: 75px;
   background: black;
   color: white;
   border-radius: 7px;
   padding: 10px;
   margin: 10px;
-  font-size: 10px;
+  font-size: 15px;
   :disabled {
     opacity: 0.4;
   }
@@ -180,6 +182,7 @@ function Session(props) {
         topics: updTopics,
       }).then(() => {
         setSession({ ...session, topics: updTopics });
+        
       });
     }
     document.querySelector('#topicinput').value = '';
@@ -254,7 +257,7 @@ function Session(props) {
   }, [id]);
 
   if (!session) {
-    return <h2>no session to display</h2>;
+    return <div><RotateLoader color="red" loading="true" size={150} /></div>;
   }
 
   return (
@@ -300,6 +303,7 @@ function Session(props) {
                             delNote={handleNoteDel}
                             updNote={handleNoteUpdate}
                             setTopic={handleTopicAssign}
+                            select={false}
                           />
                         ) : (
                           ''
@@ -320,6 +324,7 @@ function Session(props) {
                 delNote={handleNoteDel}
                 updNote={handleNoteUpdate}
                 setTopic={handleTopicAssign}
+                select={false}
               />
             ) : (
               ''
@@ -337,7 +342,7 @@ function Session(props) {
             </div>
           ) : (
             <form id="summary" onSubmit={handleSubmit}>
-              <textarea value={textarea} onChange={handleTextareaChange} rows="4" cols="50"/>
+              <textarea value={textarea} onChange={handleTextareaChange} rows="8" cols="50"/>
               <ButtonForm type='submit' value='Save'/>
             </form>
           )}

@@ -64,7 +64,7 @@ function NewSession(){
     const navigate = useNavigate();
     const [notes, setNotes] = useState([]);
     const [isEditing, setIsEditing] = useState(false)
-    const [title, setTitle] = useState("Untitled")
+    const [title, setTitle] = useState("Untitled (double click to edit)")
     const [style, setStyle] = useState({ width: '80%', height: '10%', borderRadius: '7px' });
     const { user } = useUserAuth();
   
