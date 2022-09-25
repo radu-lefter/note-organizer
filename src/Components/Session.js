@@ -19,6 +19,81 @@ export const CardWrapper = styled.div`
   border-radius: 5px;
 `;
 
+export const Summary = styled.div`
+width: 35%;
+height: 300px;
+overflow: auto;
+position: fixed;
+  top: 70%;
+  right: 10%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
+  @media only screen and (max-width: 600px) {
+  width: 100%;
+  position: static;
+  transform: none;
+}
+`;
+
+export const Notes = styled.div`
+width: 55%;
+
+@media only screen and (max-width: 600px) {
+  width: 100%;
+
+`;
+
+
+
+const Button = styled.button`
+  width: 55px;
+  background: black;
+  color: white;
+  border-radius: 7px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 10px;
+  :disabled {
+    opacity: 0.4;
+  }
+  :hover {
+    box-shadow: 0 0 10px blue;
+  }
+`;
+
+const ButtonDel = styled.button`
+width: 55px;
+  background: red;
+  color: white;
+  border-radius: 7px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 10px;
+  :disabled {
+    opacity: 0.4;
+  }
+  :hover {
+    box-shadow: 0 0 10px blue;
+  }
+`;
+
+const ButtonForm = styled.input`
+  background: black;
+  color: white;
+  border-radius: 7px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 10px;
+  :disabled {
+    opacity: 0.4;
+  }
+  :hover {
+    box-shadow: 0 0 10px blue;
+  }
+`;
+
 function Session(props) {
   let { id } = useParams();
   const sessRef = doc(db, 'sessions', id);
@@ -190,6 +265,7 @@ function Session(props) {
     <>
       <Navbar></Navbar>
       <CardWrapper>
+        <Notes>
         <Title name={session.name} updTitle={handleTitleChange} />
         <h2>
           Session recorded on{' '}
@@ -254,20 +330,22 @@ function Session(props) {
             )
           )}
         </div>
-        <div>
+        </Notes>
+        <Summary>
           <h4>Summary</h4>
           {session.summary && editSummary ? (
             <div>
             <p>{session.summary}</p>
-            <button onClick={handleSummaryUpdate}>Edit</button><button onClick={handleSummaryDel}>Delete</button>
+            <Button onClick={handleSummaryUpdate}>Edit</Button>
+            <ButtonDel onClick={handleSummaryDel}>Delete</ButtonDel>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
+            <form id="summary" onSubmit={handleSubmit}>
               <textarea value={textarea} onChange={handleTextareaChange} rows="4" cols="50"/>
-              <input type="submit" />
+              <ButtonForm type='submit' value='Save'/>
             </form>
           )}
-        </div>
+        </Summary>
       </CardWrapper>
     </>
   );

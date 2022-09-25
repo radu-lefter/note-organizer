@@ -58,7 +58,7 @@ function Note(props) {
                   Delete
                 </button>
                 <button onClick={handleAddTopic} type="submit">
-                  Add topic
+                  Assign topic
                 </button>
               </>
             )}

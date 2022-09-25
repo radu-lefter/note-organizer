@@ -42,7 +42,9 @@ function NewSession(){
       }
 
       const handleInputChange = (event) => {
-        if(event.target.value.length > 10){
+        if(event.key === 'Enter'){
+          handleNoteClick();
+        }else if(event.target.value.length > 100){
           setStyle({width: '80%', border: '1px solid red', outline: 'none'})
         }else{
           setStyle({width: '80%', border: '1px solid blue', outline: 'none'})

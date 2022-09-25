@@ -47,6 +47,7 @@ justify-content: space-around;
 `;
 
 const ButtonSession = styled.button`
+  width: 85px;
   background: black;
   color: white;
   border-radius: 7px;
@@ -61,6 +62,7 @@ const ButtonSession = styled.button`
 `;
 
 const ButtonSDelete = styled.button`
+  width: 85px;
   background: red;
   color: white;
   border-radius: 7px;
