@@ -7,8 +7,9 @@ import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import { useState, useEffect } from 'react';
 import { db } from '../config/firebase-config';
-import { doc, deleteDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, deleteDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import RotateLoader from 'react-spinners/ClipLoader';
+import { useUserAuth } from "../context/userAuthContext";
 
 export const Container = styled.div`
   width: 80%;
@@ -59,17 +60,9 @@ const Button = styled.button`
 `;
 
 function Dashboard() {
+  const { user } = useUserAuth();
   const [data, setData] = useState([]);
 
-  async function getAllDocs() {
-    const newdata = [];
-    const querySnapshot = await getDocs(collection(db, 'sessions'));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      newdata.push({ id: doc.id, session: doc.data() });
-    });
-    setData(newdata);
-  }
 
   const handleSessionDel = async (id) => {
     const docRef = doc(db, 'sessions', id);
@@ -80,8 +73,18 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    getAllDocs();
-  }, []);
+    async function getDocument() {
+        const newdata = [];
+        const q = query(collection(db, "sessions"), where("user", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          newdata.push({ id: doc.id, session: doc.data() });
+          setData(newdata);
+        });
+    }
+    getDocument();
+    
+  }, [user.uid]);
 
   if (!data) {
     return (

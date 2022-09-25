@@ -113,7 +113,6 @@ function Session(props) {
 
   const handleTextareaChange = (event) => {
     setTextarea(event.target.value)
-    console.log(textarea)
   }
 
   const handleSubmit = async (e) => {
@@ -123,7 +122,7 @@ function Session(props) {
       }).then(() => {
         setSession({ ...session, summary: textarea });
         setEditSummary(true);
-        console.log("summary set")
+        console.log("Summary set")
       });
   }
 
@@ -222,7 +221,6 @@ function Session(props) {
   };
 
   const handleTopicAssign = async (topic, note) => {
-    //console.log(id)
     const updtNote = {
       id: note.id,
       note: note.note,
@@ -244,10 +242,8 @@ function Session(props) {
         const sessRef = doc(db, 'sessions', id);
         const docSnap = await getDoc(sessRef);
         if (docSnap.exists()) {
-          console.log('Document data:', docSnap.data());
           setSession(docSnap.data());
         } else {
-          // doc.data() will be undefined in this case
           console.log('No such document!');
         }
       } catch (error) {

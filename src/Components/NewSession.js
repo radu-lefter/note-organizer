@@ -4,9 +4,10 @@ import { useState } from 'react';
 import Navbar from "./Navbar";
 import {useNavigate} from 'react-router-dom';
 import { db } from "../config/firebase-config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp} from "firebase/firestore";
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { useUserAuth } from "../context/userAuthContext";
 
 const NotesContainer = styled.div`
 width: 80%;
@@ -65,7 +66,8 @@ function NewSession(){
     const [isEditing, setIsEditing] = useState(false)
     const [title, setTitle] = useState("Untitled")
     const [style, setStyle] = useState({ width: '80%', height: '10%', borderRadius: '7px' });
-
+    const { user } = useUserAuth();
+  
 
     const handleNoteClick = () => {
         const text = document.querySelector('#noteinput').value.trim();
@@ -77,14 +79,12 @@ function NewSession(){
           }
           document.querySelector('#noteinput').value = '';
           const updatedNotes = [...notes, newNote];
-          console.log(updatedNotes);
           setNotes(updatedNotes);
         }
 
       };
     
       const handleTitleChange = (event) => {
-        console.log(event.target.value.length);
         if (event.key === 'Enter') {
         setTitle(event.target.value);
         setIsEditing(false);
@@ -109,7 +109,8 @@ function NewSession(){
             date: timeStart, 
             name: title, 
             notes: notes, 
-            topics: []         
+            topics: [], 
+            user: user.uid         
         }).then(
            ()=>{navigate('/home');}
           )
