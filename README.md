@@ -1,7 +1,7 @@
 # Note organizer React App
-This is a project for the Contemporary Web Applications Level 6 Computer Science Course at Solent University
-A live demo can be found here: https://orgeton-fc535.web.app/home
-It requires signup and login
+This is a project for the Contemporary Web Applications Level 6 Computer Science Course at Solent University\
+A live demo can be found here: https://orgeton-fc535.web.app/home\
+It requires signup and login\
 It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Features
@@ -11,10 +11,10 @@ It was bootstrapped with [Create React App](https://github.com/facebook/create-r
 - Perform CRUD functionality on notes and topics
 - Write a summary about the lecture based on the notes
 
-#Usage
+# Usage
 
-##ENV Variables
-Create a .env file in then root and add the following from your firebase project
+## ENV Variables
+Create a .env file in then root and add the following from your firebase project\
 REACT_APP_FIREBASE_API_KEY = 
 REACT_APP_FIREBASE_AUTH_DOMAIN = 
 REACT_APP_FIREBASE_PROJECT_ID = 
@@ -23,7 +23,7 @@ REACT_APP_FIREBASE_MESSAGING_SENDER_ID =
 REACT_APP_FIREBASE_APP_ID = 
 REACT_APP_MEASUREMENT_ID = 
 
-##Install Dependencies
+## Install Dependencies
 npm install
 
 ## Available Scripts
