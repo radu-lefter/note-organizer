@@ -50,11 +50,6 @@ Since the application is useful to me too as a student, I had no problems puttin
 
 I have also estimated the development process to take about one month, so I divided my time and my resources accordingly. I used the Jira Kanban board to prioritize my tasks and track my progress. 
 
-![Graphical user interface
-
-Description automatically generated](Aspose.Words.3191e3ca-3a6f-4db2-b234-0a147e797c7c.001.png)
-
-Fig. 1 Kanban board
 
 **Small releases**
 
@@ -80,11 +75,6 @@ Although I did not have another programmer to consult with about the quality of 
 
 I have organized my code in branches so that I could implement every new feature separately from the main code, merging it with the master branch only once I was sure the whole program was working fine. 
 
-![A screenshot of a computer screen
-
-Description automatically generated](Aspose.Words.3191e3ca-3a6f-4db2-b234-0a147e797c7c.002.png)
-
-Fig. 2 Branch integration
 
 **Evaluation methods**
 
