@@ -1,5 +1,4 @@
 import React from "react";
-//import styled from "styled-components";
 import { useState } from 'react';
 import Navbar from "./Navbar";
 import {useNavigate} from 'react-router-dom';

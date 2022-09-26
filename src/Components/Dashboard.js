@@ -1,6 +1,4 @@
 import React from 'react';
-
-//import PropTypes from "prop-types";
 import styled from 'styled-components';
 import Card from './Card';
 import { Link } from 'react-router-dom';
@@ -123,8 +121,5 @@ function Dashboard() {
   );
 }
 
-// Dashboard.propTypes = {
-//   checkins: PropTypes.array.isRequired
-// };
 
 export default Dashboard;

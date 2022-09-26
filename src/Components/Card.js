@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-//import { FaTrash } from 'react-icons/fa';
+
 
 const CardContainer = styled.div`
   flex: 1 0 200px;

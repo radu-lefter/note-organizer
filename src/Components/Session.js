@@ -1,5 +1,4 @@
 import React from 'react';
-//import PropTypes from "prop-types";
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -352,8 +351,5 @@ function Session(props) {
   );
 }
 
-// Dashboard.propTypes = {
-//   checkins: PropTypes.array.isRequired
-// };
 
 export default Session;
