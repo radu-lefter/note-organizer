@@ -1,6 +1,6 @@
 # Note Organizer React App
 This is a project for the Contemporary Web Applications Level 6 Computer Science Course at Solent University\
-A live demo can be found here: https://orgeton-fc535.web.app/home\
+A live demo can be found here: https://orgeton-fc535.web.app/home \
 It requires signup and login\
 It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
