@@ -5,7 +5,7 @@ It requires signup and login\
 It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Features
-- Quickly take notes ducring a lecture
+- Quickly take notes during a lecture
 - Save the session for later review
 - Organize the notes under topics
 - Perform CRUD functionality on notes and topics
@@ -21,7 +21,7 @@ REACT_APP_FIREBASE_PROJECT_ID = \
 REACT_APP_FIREBASE_STORAGE_BUCKET =\
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID = \ 
 REACT_APP_FIREBASE_APP_ID = \
-REACT_APP_MEASUREMENT_ID = \
+REACT_APP_MEASUREMENT_ID = 
 
 
 ## Available Scripts
