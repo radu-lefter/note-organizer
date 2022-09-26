@@ -1,4 +1,4 @@
-# Note organizer React App
+# Note Organizer React App
 This is a project for the Contemporary Web Applications Level 6 Computer Science Course at Solent University\
 A live demo can be found here: https://orgeton-fc535.web.app/home\
 It requires signup and login\
@@ -15,20 +15,22 @@ It was bootstrapped with [Create React App](https://github.com/facebook/create-r
 
 ## ENV Variables
 Create a .env file in then root and add the following from your firebase project\
-REACT_APP_FIREBASE_API_KEY = 
-REACT_APP_FIREBASE_AUTH_DOMAIN = 
-REACT_APP_FIREBASE_PROJECT_ID = 
-REACT_APP_FIREBASE_STORAGE_BUCKET = 
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID = 
-REACT_APP_FIREBASE_APP_ID = 
-REACT_APP_MEASUREMENT_ID = 
+REACT_APP_FIREBASE_API_KEY =\ 
+REACT_APP_FIREBASE_AUTH_DOMAIN =\ 
+REACT_APP_FIREBASE_PROJECT_ID =\
+REACT_APP_FIREBASE_STORAGE_BUCKET =\
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID =\ 
+REACT_APP_FIREBASE_APP_ID =\ 
+REACT_APP_MEASUREMENT_ID =\ 
 
-## Install Dependencies
-npm install
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+Installs all the necessary dependencies
 
 ### `npm start`
 
